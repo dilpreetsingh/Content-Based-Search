@@ -37,7 +37,8 @@ class ImageDataset(Dataset):
         return self.transform(self.tfms, image).px
 
     def transform(self, tfms, img):
-        return vision.apply_tfms(tfms, img, **TRANSFORMATION_PARAMS)
+        # return vision.apply_tfms(tfms, img, **TRANSFORMATION_PARAMS)
+        return img.apply_tfms(tfms, **TRANSFORMATION_PARAMS)
 
     def get(self, index, **kwargs):
         return self.__getitem__(index, **kwargs)
