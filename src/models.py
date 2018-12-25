@@ -36,7 +36,7 @@ class VGG16(Model):
     def forward_pass(self, batch):
         layer_relu_36 = self.model.classifier[:4]
 
-        feature_output = self.model.features.forward(batch)
+        feature_output = self.model.features.to(utils.torch_device).forward(batch)
         feature_output = feature_output.view(feature_output.size(0), -1)
 
         return layer_relu_36.forward(feature_output).to(utils.torch_device())
