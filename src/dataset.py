@@ -36,7 +36,7 @@ class ImageDataset(Dataset):
             return image.px
 
         # Apply transforms to the image
-        return self.transform(self.tfms, image).px.to(utils.torch_device())
+        return self.transform(self.tfms, image).px
 
     def transform(self, tfms, img):
         # return vision.apply_tfms(tfms, img, **TRANSFORMATION_PARAMS)

@@ -7,6 +7,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 import models
+import utils
 from dataset import ImageDataset
 
 logging.getLogger().setLevel(logging.INFO)
@@ -28,7 +29,7 @@ def run(model_name, output_dir, dataname, data_dir='./data', batch_size=16, test
     iterator = tqdm(data_loader)
     for batch in iterator:
 
-        output = model.forward_pass(batch)
+        output = model.forward_pass(batch.to(utils.torch_device()))
 
         features_list.append(output.cpu().detach().numpy())
 
