@@ -30,7 +30,7 @@ class Model:
 
 class VGG16(Model):
     def __init__(self):
-        super(VGG, self).__init__()
+        super(VGG16, self).__init__()
         self.model = tvm.vgg16(pretrained=True)
 
     def forward_pass(self, batch):
