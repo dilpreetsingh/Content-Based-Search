@@ -30,7 +30,7 @@ def run(model_name, output_dir, dataname, data_dir='./data', batch_size=16, test
 
         output = model.forward_pass(batch)
 
-        features_list.append(output.detach().numpy())
+        features_list.append(output.cpu().detach().numpy())
 
         if test_run != -1 and count > test_run:
             iterator.close()

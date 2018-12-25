@@ -5,6 +5,8 @@ import os
 from fastai import vision
 from torch.utils.data import Dataset
 
+import utils
+
 
 TRANSFORMATION_PARAMS = dict(
     size=224,
@@ -34,7 +36,7 @@ class ImageDataset(Dataset):
             return image.px
 
         # Apply transforms to the image
-        return self.transform(self.tfms, image).px
+        return self.transform(self.tfms, image).px.to(utils.torch_device())
 
     def transform(self, tfms, img):
         # return vision.apply_tfms(tfms, img, **TRANSFORMATION_PARAMS)

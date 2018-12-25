@@ -3,6 +3,8 @@ import torchvision.models as tvm
 
 from torchsummary import summary
 
+import utils
+
 
 def get_model(name):
     if name is 'vgg16':
@@ -32,7 +34,7 @@ class VGG16(Model):
         feature_output = self.model.features.forward(batch)
         feature_output = feature_output.view(feature_output.size(0), -1)
 
-        return layer_relu_36.forward(feature_output)
+        return layer_relu_36.forward(feature_output).to(utils.torch_device())
 
 
 class Resnet152(Model):
@@ -44,4 +46,4 @@ class Resnet152(Model):
         self.features = nn.Sequential(*list(self.model.children())[:-1])
 
     def forward_pass(self, batch):
-        return self.features.forward(batch).view(batch.size(0), -1)
+        return self.features.forward(batch).view(batch.size(0), -1).to(utils.torch_device())
