@@ -46,4 +46,4 @@ class Resnet152(Model):
         self.features = nn.Sequential(*list(self.model.children())[:-1])
 
     def forward_pass(self, batch):
-        return self.features.forward(batch).view(batch.size(0), -1).to(utils.torch_device())
+        return self.features.forward(batch.to(utils.torch_device())).view(batch.size(0), -1).to(utils.torch_device())
