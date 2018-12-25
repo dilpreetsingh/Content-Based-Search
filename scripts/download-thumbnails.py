@@ -12,7 +12,7 @@ import urllib.request
 SEED = 71
 
 def download(artwork, output_dir='./data/moma-artworks'):
-    request.urlretrieve(artwork['ThumbnailURL'], '%s/%d.jpg' % (output_dir, artwork['ObjectID']))
+    request.urlretrieve(artwork['ThumbnailURL'], '%s/%d.jpeg' % (output_dir, artwork['ObjectID']))
 
 def run(artworks_json, num_artworks=100, parallel=5):
     # select ... outout num_artworks
