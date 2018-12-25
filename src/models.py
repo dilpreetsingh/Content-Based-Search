@@ -32,14 +32,15 @@ class VGG16(Model):
     def __init__(self):
         super(VGG16, self).__init__()
         self.model = tvm.vgg16(pretrained=True)
+        self.features = self.model.features.to(utils.torch_device())
+        self.classifier = self.model.classifier[:4].to(utils.torch_device())
 
     def forward_pass(self, batch):
-        layer_relu_36 = self.model.classifier[:4]
 
-        feature_output = self.model.features.to(utils.torch_device()).forward(batch)
+        feature_output = self.features.forward(batch)
         feature_output = feature_output.view(feature_output.size(0), -1)
 
-        return layer_relu_36.forward(feature_output).to(utils.torch_device())
+        return self.classifier.forward(feature_output)
 
 
 class Resnet152(Model):
