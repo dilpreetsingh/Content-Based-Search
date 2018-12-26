@@ -1,4 +1,4 @@
-# Image-Based Search
+# Image-Based Search (in progress)
 
 Finding similar images can be useful in some cases, for example one can use it to retrieve mountain photos from a ton of photos in his gallery. In this project, we aim to achieve this search by using a nearest neighbour approach over image features produced by neural networks.
 
@@ -12,6 +12,9 @@ Neural networks learn to extract features from data without any explicit knowled
 
 With this representation, it enables us to perform nearest neighbor search. We use [Annoy][annoy], performing approximate nearest neightbor search.
 
+## Analysis Tool
+An interactive analysis can be found at [Something][tool].
+
 ## Experiment 1: Visually Similar Artworks
 In this first part, we randomly take 5000 artworks from [MoMa's collection][dataset]. The goal is to explore how the images of these artworks are projected onto the feature space.
 
@@ -23,9 +26,21 @@ In this first part, we randomly take 5000 artworks from [MoMa's collection][data
 TODO: Some analysis
 
 ## Experiment 2: Recovery Perturbed Artworks
+<div align="center">
+<img src="https://i.imgur.com/KOtYz4V.png"/><br>
+<b>Fig. 3: Perturbation Profiles</b></br>
+</div>
 
-## Analysis Tool
-An interactive analysis can be found at [Something][tool].
+<div align="center">
+<img src="https://i.imgur.com/jDW2Y4z.png"/><br>
+<b>Fig. 4: Recovery Perturbed Artworks</b><br>
+</div>
+
+<div align="center">
+<img src="https://i.imgur.com/9Jzl8gS.png"/><br>
+<b>Fig. 5: Precision, Recall, and F1-score</b><br>
+</div>
+
 
 ## Development
 Please refer to `DEVELOPMENT.md`.
