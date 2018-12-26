@@ -6,6 +6,14 @@ import numpy as np
 from annoy import AnnoyIndex
 from dataset import ImageDataset
 
+import config
+
+PUBLIC_URL = 'https://s3.amazonaws.com/pchormai-public/artwork-similarity'
+
+
+def remove_suffix(name):
+    return name.split('--m')[0]
+
 
 def construct_ann_index(metric, num_trees, features):
     feature_dims = features[0].shape[0]
@@ -30,7 +38,7 @@ def run(file, sim_matrix, data_path, annoy_distrance='angular', annoy_num_tree=5
             'date': row['Date'],
             'artist_name': ','.join(row['Artist']),
             'medium': row['Medium'],
-            'image': row['ThumbnailURL']
+            'moma_image': row['ThumbnailURL']
         }
 
     ds = ImageDataset(data_path)
@@ -43,21 +51,34 @@ def run(file, sim_matrix, data_path, annoy_distrance='angular', annoy_num_tree=5
     features = np.load(sim_matrix)
     ann = construct_ann_index(annoy_distrance, annoy_num_tree, features)
 
+    public_image_url = lambda k: '%s/%s/%s.jpeg' % (PUBLIC_URL, data_path, k)
+
     arr_results = []
     for k in list(data_indices):
-        if k in data_indices:
+        if k in data_indices and '--m' not in k:
             ann_idx = data_to_ann[k]
 
             similar_images, distances = ann.get_nns_by_item(ann_idx, 11, include_distances=True)
             similar_images, distances = similar_images[1:], distances[1:]
             # try:
             item = dict(
-                artwork=dict(lot_dict[k])
+                artwork=dict(lot_dict[remove_suffix(k)])
             )
 
-            sims = list(map(lambda s: lot_dict[ann_to_data[s]].copy(), similar_images))
+            item['artwork']['image'] = public_image_url(k)
+
+            sims = list(map(lambda s: lot_dict[remove_suffix(ann_to_data[s])].copy(), similar_images))
             for idx in range(len(sims)):
                 sims[idx]['score'] = 1 - float(distances[idx])
+                cur_sim = sims[idx]
+                cur_sim['score'] = 1 - float(distances[idx])
+
+                data_idx = ann_to_data[similar_images[idx]]
+                cur_sim['image'] = public_image_url(data_idx)
+
+                if '--m' in data_idx:
+                    cur_sim['manipulation_profile'] = config.MANIPULATE_MAPPING[data_idx.split('--')[-1]]
+
             item['sims'] = list(sorted(sims, key=lambda x: x['score'], reverse=True))
             arr_results.append(item)
             # except Exception as e:
