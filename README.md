@@ -5,10 +5,10 @@ Finding similar images can be useful in some cases, for example one can use it t
 ## Motivation
 Neural networks learn to extract features from data without any explicit knowledge. Not only these features are relevant to solve given problems that they are trained for, the features might also be useful for other tasks. In this case, we use three pretrained networks, namely VGG16, ResNet152, and DenseNet. We aim to use these features as a representation of each image. We hope that visually similar images would have a similar representation. In other words, these images lay closely in this feature space. 
 
-<center>
+<div style="text-align: center">
 <img src="https://i.imgur.com/as9lJ7i.png"/>
 <b>Fig. 1: Project Overview</b>
-</center>
+</div>
 
 With this representation, it enables us to perform nearest neighbor search. We use [Annoy][annoy], performing approximate nearest neightbor search.
 
