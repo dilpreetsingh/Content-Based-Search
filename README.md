@@ -81,8 +81,8 @@ Please refer to `DEVELOPMENT.md`.
 
 [idea]: http://ai.sensilab.monash.edu/2018/09/17/similarity-search-engine/
 [dataset]: https://github.com/MuseumofModernArt/collection
-[tool]: http://pat.chormai.org/artwork-similarity-vis-tool/
+[tool]: http://pat.chormai.org/visually-similar-image-search-analysis-tool/
 [annoy]: https://github.com/spotify/annoy
-[vgg16]: x
-[resnet]: x
-[densenet]: x
+[vgg16]: https://arxiv.org/abs/1409.1556
+[resnet]: https://arxiv.org/abs/1512.03385
+[densenet]: https://arxiv.org/abs/1608.06993
