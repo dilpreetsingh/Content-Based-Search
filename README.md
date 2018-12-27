@@ -13,6 +13,11 @@ Neural networks learn to extract features from data without any explicit knowled
 With this representation, it enables us to perform nearest neighbor search. We use [Annoy][annoy], performing approximate nearest neightbor search.
 
 ## Analysis Tool
+<div align="center">
+<img src="https://i.imgur.com/as9lJ7i.png"/><br>
+<b>Fig. 1: Project Overview</b>
+</div>
+
 We have developed [a website][tool] that provides an interface for exploring results from our experiments in an informative and reproducible way. If you are interested in self-exploring and digging into the results, please give it a try 😎.
 
 
