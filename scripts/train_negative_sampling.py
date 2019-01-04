@@ -89,7 +89,7 @@ noisy_dataset = NoisyImageDataset(args.train_dir, transform=base_transform, nois
 trainloader = torch.utils.data.DataLoader(noisy_dataset, batch_size=args.batch_size, shuffle=True, num_workers=1)
 
 test_noisy_dataset = NoisyImageDataset(args.test_dir, transform=base_transform, noisy_transform=noisy_transform)
-testloader = torch.utils.data.DataLoader(test_noisy_dataset, batch_size=4, shuffle=False, num_workers=1)
+testloader = torch.utils.data.DataLoader(test_noisy_dataset, batch_size=args.batch_size, shuffle=False, num_workers=1)
 
 
 class Model(nn.Module):
@@ -146,7 +146,7 @@ with torch.no_grad():
         x = data[0]
         z = model(x.to(device))
 
-        embeddings[i*4:(i+1)*4] = z.cpu()
+        embeddings[i*args.batch_size:(i+1)*args.batch_size] = z.cpu()
 
 
 sim_matrix = embeddings.dot(embeddings.T)
