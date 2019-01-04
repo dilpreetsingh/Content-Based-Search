@@ -32,3 +32,8 @@ def get_stats(file_paths, nearest_neighbors, k=3, max_rel_items=5, epsilon=np.fi
     print('Precision %.4f +/- %.4f' % (np.mean(precision), np.std(precision)))
     print('Recall    %.4f +/- %.4f' % (np.mean(recall), np.std(recall)))
     print('f1    %.4f +/- %.4f' % (np.mean(f1), np.std(f1)))
+
+
+def disable_gradients(parameters):
+    for p in parameters:
+        p.require_grads = False
