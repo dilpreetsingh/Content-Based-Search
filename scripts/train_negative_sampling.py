@@ -120,7 +120,7 @@ for epoch in range(args.epochs):
 
         optimizer.zero_grad()
 
-        z = list(map(lambda x: model(x), data))
+        z = list(map(lambda x: model(x.to(device)), data))
 
         loss = triplet_loss(*z)
 
