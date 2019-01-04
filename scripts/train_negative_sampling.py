@@ -142,7 +142,7 @@ with torch.no_grad():
         x = data[0]
         z = model(x.to(device))
 
-        embeddings[i*4:(i+1)*4] = z
+        embeddings[i*4:(i+1)*4] = z.cpu()
 
 
 sim_matrix = embeddings.dot(embeddings.T)
