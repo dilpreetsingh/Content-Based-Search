@@ -26,6 +26,10 @@ parser.add_argument('--batch-size', type=int, default=128, metavar='N',
                     help='input batch size for training (default: 128)')
 parser.add_argument('--epochs', type=int, default=10, metavar='N',
                     help='number of epochs to train (default: 10)')
+parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+                    help='how many batches to wait before logging training status')
+parser.add_argument('--lr', type=float, default=0.001, metavar='N',
+                    help='learning_rate')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='enables CUDA training')
 parser.add_argument('--train_dir', type=str, default='./data-train', metavar='N',
@@ -113,7 +117,7 @@ running_loss = []
 
 model = Model().to(device)
 triplet_loss = nn.TripletMarginLoss(margin=1.0, p=2)
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
 for epoch in range(args.epochs):
     for i, data in enumerate(trainloader, 0):
@@ -129,7 +133,7 @@ for epoch in range(args.epochs):
 
         # print statistics
         running_loss.append(loss.item())
-        if i % 10 == 0:
+        if i % args.log_interval == 0:
             print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, np.mean(running_loss)))
             running_loss = []
 
