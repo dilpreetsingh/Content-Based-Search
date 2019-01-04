@@ -56,6 +56,11 @@ noisy_transform = transforms.RandomChoice([
     transforms.ColorJitter(saturation=0.2),
 ])
 
+def random_choice_without_i(no_choices, i):
+    r = np.random.choice(no_choices)
+    if r == i:
+        return random_choice_without_i(no_choices, i)
+    return r
 
 class NoisyImageDataset(object):
     def __init__(self, root_dir, transform=None, noisy_transform=None):
@@ -75,7 +80,9 @@ class NoisyImageDataset(object):
     def __getitem__(self, index):
         image, x = self._load_and_transform(index)
         pos_x = self.noisy_transform(image)
-        _, neg_x = self._load_and_transform(np.random.choice(self.total_data))
+
+        ridx = random_choice_without_i(self.total_data, index)
+        _, neg_x = self._load_and_transform(ridx)
 
         return x, pos_x, neg_x
 
