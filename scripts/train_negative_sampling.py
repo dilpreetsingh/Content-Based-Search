@@ -14,6 +14,7 @@ from datetime import datetime
 
 from PIL import Image
 
+from scipy.spatial.distance import pdist, squareform
 
 import torchvision.transforms as transforms
 
@@ -191,8 +192,9 @@ with torch.no_grad():
         embeddings[i*args.batch_size:(i+1)*args.batch_size] = z.cpu()
 
 
-sim_matrix = embeddings.dot(embeddings.T)
-nearest_neighbors = np.argsort(-sim_matrix, axis=1)
+dist_matrix = squareform(pdist(embeddings, metric='euclidean'))
+print(dist_matrix.shape)
+nearest_neighbors = np.argsort(dist_matrix, axis=1)
 
 
 for k in [1, 3, 5]:
