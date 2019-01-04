@@ -52,6 +52,7 @@ noisy_transform = transforms.RandomChoice([
 
 class NoisyImageDataset(object):
     def __init__(self, root_dir, transform=None, noisy_transform=None):
+        print('load data from %s' % root_dir)
         self.image_paths = sorted(glob.glob(root_dir + '/*.jpeg'))
         assert self.image_paths != 0, "No images found in {}".format(root_dir)
 
@@ -155,7 +156,7 @@ nearest_neighbors = np.argsort(-sim_matrix, axis=1)
 
 for k in [1, 3, 5]:
     print('===== k=%d =====' % k)
-    utils.get_stats(testloader.dataset.image_paths, nearest_neighbors, k=5)
+    utils.get_stats(testloader.dataset.image_paths, nearest_neighbors, k=k)
 
 # todo: save to file
 
