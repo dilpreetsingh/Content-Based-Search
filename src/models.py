@@ -34,8 +34,12 @@ class VGG16(Model):
     def __init__(self):
         super(VGG16, self).__init__()
         self.model = tvm.vgg16(pretrained=True)
+
         self.features = self.model.features.to(utils.torch_device())
         self.classifier = self.model.classifier[:4].to(utils.torch_device())
+
+        utils.disable_gradients(self.features.parameters())
+        utils.disable_gradients(self.classifier.parameters())
 
     def forward_pass(self, batch):
 
