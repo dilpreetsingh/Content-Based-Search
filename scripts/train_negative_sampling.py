@@ -130,6 +130,8 @@ class Model(nn.Module):
             Flatten(),
         )
 
+        self.dropout = nn.Dropout(p=0.2)
+
     def _normalize(self, x):
         norm = x.norm(p=2, dim=1, keepdim=True)
         return x.div(norm)
@@ -142,6 +144,7 @@ class Model(nn.Module):
         p_x = self._normalize(torch.cat((path1_x, path2_x), dim=1))
 
         x = torch.cat((vgg_x, p_x), dim=1)
+        x = self.dropout(x)
 
         x = self.encoder(x)
         return self._normalize(x)
