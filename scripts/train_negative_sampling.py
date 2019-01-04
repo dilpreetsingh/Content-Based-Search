@@ -140,7 +140,7 @@ test_loss = []
 with torch.no_grad():
     for i, data in enumerate(testloader):
         x = data[0]
-        z = model(x)
+        z = model(x.to(device))
 
         embeddings[i*4:(i+1)*4] = z
 
