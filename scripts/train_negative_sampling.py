@@ -153,7 +153,9 @@ sim_matrix = embeddings.dot(embeddings.T)
 nearest_neighbors = np.argsort(-sim_matrix, axis=1)
 
 
-utils.get_stats(testloader.dataset.image_paths, nearest_neighbors, k=5)
+for k in [1, 3, 5]:
+    print('===== k=%d =====' % k)
+    utils.get_stats(testloader.dataset.image_paths, nearest_neighbors, k=5)
 
 # todo: save to file
 
