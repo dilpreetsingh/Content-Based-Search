@@ -145,7 +145,7 @@ class Model(nn.Module):
         return self._normalize(x)
 
     def parameters(self):
-        return list(self.encoder.parameters())
+        return list(self.encoder.parameters()) + list(self.path1.parameters()) + list(self.path2.parameters())
 
 
 running_loss = []
@@ -153,6 +153,7 @@ running_loss = []
 model = Model().to(device)
 triplet_loss = nn.TripletMarginLoss(margin=1.0, p=2)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
+print()
 
 for epoch in range(args.epochs):
     for i, data in enumerate(trainloader, 0):
