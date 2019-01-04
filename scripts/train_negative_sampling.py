@@ -42,6 +42,13 @@ args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 device = torch.device("cuda" if args.cuda else "cpu")
 
+class Flatten(nn.Module):
+    def __init__(self):
+        super(Flatten, self).__init__()
+
+    def forward(self, x):
+        return x.view(x.size(0), -1)
+
 base_transform = transforms.Compose([transforms.CenterCrop(224), transforms.ToTensor()])
 noisy_transform = transforms.RandomChoice([
     transforms.ColorJitter(brightness=0.5),
@@ -59,17 +66,15 @@ class NoisyImageDataset(object):
         self.image_names = [os.path.basename(path) for path in self.image_paths]
         self.transform = transform
 
-        self.noisy_transofrm = transforms.Compose([noisy_transform, self.transform])
+        self.noisy_transform = transforms.Compose([noisy_transform, self.transform])
         self.total_data = len(self.image_paths)
 
     def __len__(self):
         return self.total_data
 
     def __getitem__(self, index):
-        image_path = self.image_paths[index]
-
         image, x = self._load_and_transform(index)
-        pos_x = self.noisy_transofrm(image)
+        pos_x = self.noisy_transform(image)
         _, neg_x = self._load_and_transform(np.random.choice(self.total_data))
 
         return x, pos_x, neg_x
@@ -98,17 +103,39 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.vgg = models.VGG16()
         self.encoder = nn.Sequential(
-            nn.Linear(4096, 1024)
+            nn.Linear(3072+4096, 4096),
+            nn.ReLU(True)
         )
 
+        self.path1 = nn.Sequential(
+            nn.MaxPool2d(4, 4),
+            nn.Conv2d(3, 96, 8, 4),
+            nn.MaxPool2d(6, 2),
+            Flatten(),
+        )
+
+        self.path2 = nn.Sequential(
+            nn.MaxPool2d(8, 8),
+            nn.Conv2d(3, 96, 8, 4),
+            nn.MaxPool2d(3, 1),
+            Flatten(),
+        )
+
+    def _normalize(self, x):
+        norm = x.norm(p=2, dim=1, keepdim=True)
+        return x.div(norm)
+
     def forward(self, x):
-        x = self.vgg.forward_pass(x)
-        z = self.encoder(x)
+        vgg_x = self._normalize(self.vgg.forward_pass(x))
 
-        norm = z.norm(p=2, dim=1, keepdim=True)
-        normed_z = z.div(norm)
+        path1_x = self.path1(x)
+        path2_x = self.path2(x)
+        p_x = self._normalize(torch.cat((path1_x, path2_x), dim=1))
 
-        return normed_z
+        x = torch.cat((vgg_x, p_x), dim=1)
+
+        x = self.encoder(x)
+        return self._normalize(x)
 
     def parameters(self):
         return list(self.encoder.parameters())
@@ -140,7 +167,7 @@ for epoch in range(args.epochs):
 
 print('Computing features for testing set')
 
-embeddings = np.zeros((len(testloader.dataset), 1024))
+embeddings = np.zeros((len(testloader.dataset), 4096))
 test_loss = []
 with torch.no_grad():
     for i, data in enumerate(testloader):
