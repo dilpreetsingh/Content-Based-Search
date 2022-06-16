@@ -50,7 +50,7 @@ msgpack-numpy==0.4.3.2
 murmurhash==0.28.0
 nbconvert==5.4.0
 nbformat==4.4.0
-notebook==5.7.0
+notebook==6.4.12
 numexpr==2.6.9
 numpy==1.15.2
 nvidia-ml-py3==7.352.0
