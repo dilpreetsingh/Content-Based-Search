@@ -6,7 +6,7 @@ backcall==0.1.0
 biopython==1.72
 bleach==3.0.0
 Bottleneck==1.2.1
-certifi==2018.8.24
+certifi==2022.12.7
 chardet==3.0.4
 cycler==0.10.0
 cymem==2.0.2
